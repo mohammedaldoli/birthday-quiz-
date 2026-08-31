@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أسئلة رفولات ✨</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000080; /* لون خلفية نافي */
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      color: #ffffff;
+    }
+    .card {
+      background: #800020; /* لون ماروني للبطاقة */
+      padding: 30px 20px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      border: 2px solid #ff0000; /* حواف حمراء */
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+    .header-title {
+      font-size: 1.5rem;
+      color: #ff4d4d;
+      margin-bottom: 20px;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px #000;
+    }
+    h2 {
+      font-size: 1.2rem;
+      color: #ffffff;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ff4d4d;
+      border-radius: 10px;
+      font-size: 1rem;
+      margin-bottom: 15px;
+      background: #4a0013;
+      color: #ffffff;
+      text-align: center;
+      outline: none;
+      box-sizing: border-box;
+    }
+    input[type="text"]::placeholder { color: #ffb3b3; }
+    .btn-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    button {
+      background: #cc0000;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background: #990000;
+      transform: translateY(-2px);
+    }
+    .error {
+      color: #ff9999;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+    .popup-msg {
+      background: #4a0013;
+      border: 2px solid #ff4d4d;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 15px;
+      color: #ff3333;
+      font-size: 1.2rem;
+      font-weight: bold;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .final-screen {
+      font-size: 1.3rem;
+      color: #ff4d4d;
+      line-height: 1.7;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="main-card">
+    <div class="header-title">هلو هلو رفولات 👋✨</div>
+    <h2 id="question">جاري التحميل...</h2>
+    <div id="action-area"></div>
+    <div id="popup" style="display:none;" class="popup-msg"></div>
+    <p id="error-msg" class="error"></p>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        type: "text",
+        q: "لو جنتي تردين تسوين عيدميلادج برة وين حيكون؟ وهل اني مدعو ام لا؟"
+      },
+      {
+        type: "text",
+        q: "لو اكو اغنية تعبر عنج هسة بهل لحظة شنو؟"
+      },
+      {
+        type: "text",
+        q: "لو اني جنت امثل اغنية بالنسبة الج شنو حتكون؟"
+      },
+      {
+        type: "text",
+        q: "وشنو اكثر شيء تتمنيه بهاي السنة الجديدة؟"
+      },
+      {
+        type: "text",
+        q: "لو اني جنت اكلة شنو راح تكون؟"
+      },
+      {
+        type: "stay_up",
+        q: "تدرين ليش اني سهران؟"
+      }
+    ];
+
+    let currentStep = 0;
+
+    function renderStep() {
+      const qHeading = document.getElementById("question");
+      const actionArea = document.getElementById("action-area");
+      const errorMsg = document.getElementById("error-msg");
+      const popup = document.getElementById("popup");
+      
+      errorMsg.innerText = "";
+      popup.style.display = "none";
+
+      if (currentStep < questions.length) {
+        const item = questions[currentStep];
+        qHeading.innerText = item.q;
+
+        if (item.type === "text") {
+          actionArea.innerHTML = `
+            <input type="text" id="userInput" placeholder="اكتبي جوابك هنا..." autocomplete="off">
+            <button onclick="handleTextAnswer()">التالي 🚀</button>
+          `;
+        } else if (item.type === "stay_up") {
+          actionArea.innerHTML = `
+            <div class="btn-container">
+              <button onclick="handleStayUp()">كلا</button>
+              <button onclick="handleStayUp()">كلا ولكن لماذا</button>
+            </div>
+          `;
+        }
+      } else {
+        // الشاشة النهائية
+        document.getElementById("main-card").innerHTML = `
+          <div class="final-screen">
+            <p style="color: #ff4d4d; font-size: 1.5rem; font-weight: bold;">ما خلصنه تره 😜</p>
+            <p style="color: #ffffff; font-size: 1.1rem; margin-top: 15px;">روحي للخاص اسئليني عن رقم 1،2،3 كل واحد وحد ❤️✨</p>
+          </div>
+        `;
+      }
+    }
+
+    function handleTextAnswer() {
+      const val = document.getElementById("userInput").value.trim();
+      if (val === "") {
+        document.getElementById("error-msg").innerText = "كتبي جواب أولاً! 😉";
+        return;
+      }
+      currentStep++;
+      renderStep();
+    }
+
+    function handleStayUp() {
+      const popup = document.getElementById("popup");
+      const actionArea = document.getElementById("action-area");
+      
+      popup.innerText = "اني سهران علمودج رورو ❤️✨";
+      popup.style.display = "block";
+
+      actionArea.innerHTML = `
+        <button onclick="nextAfterPopup()" style="margin-top: 15px;">التالي 🚀</button>
+      `;
+    }
+
+    function nextAfterPopup() {
+      currentStep++;
+      renderStep();
+    }
+
+    // تشغيل الموقع
+    renderStep();
+  </script>
+
+</body>
+</html>
+
